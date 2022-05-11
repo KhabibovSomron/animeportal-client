@@ -1,0 +1,87 @@
+.main-banner {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    -ms-background-size: cover;
+    background-size: cover;
+    position: relative;
+    min-height: 50em;
+}
+
+.main-banner.inner {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    -ms-background-size: cover;
+    background-size: cover;
+    position: relative;
+    min-height: 20em;
+}
+
+.bg1 {
+    background-color: rgba(0, 0, 0, 0);
+    margin-top: 0;
+    background-image: url("../../../images/anime_banner_2.jpg");
+}
+
+@media(max-width:1366px) {
+    .main-banner {
+        min-height: 45em;
+    }
+}
+
+@media(max-width:1280px) {
+
+    .main-banner {
+        min-height: 40em;
+    }
+
+    .main-banner.inner {
+        min-height: 15em;
+    }
+}
+
+@media(max-width:1080px) {
+    .main-banner {
+        min-height: 38em;
+    }
+}
+
+@media screen and (max-width:900px) {
+
+    .main-banner {
+        min-height: 38em;
+    }
+}
+
+@media(max-width:800px) {
+    .main-banner.inner {
+        min-height: 12em;
+    }
+
+    .main-banner {
+        min-height: 30em;
+    }
+}
+
+@media(max-width:640px) {
+    .main-banner {
+        min-height: 28em;
+    }
+}
+
+@media(max-width:480px) {
+    .main-banner {
+        min-height: 25em;
+    }
+    .main-banner.inner {
+        min-height: 9em;
+    }
+}
+
+@media(max-width:440px) {
+ 
+    .main-banner {
+        min-height: 23em;
+    }
+}

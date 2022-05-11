@@ -1,3 +1,9 @@
+.customer-rev ul li span {
+    color: #f58b8d;
+    font-size: 0.8em
+}
+
+
 h3.sear-head {
     color: #1e272e;
     margin-bottom: 20px;
@@ -5,4 +11,45 @@ h3.sear-head {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 2px;
+}
+
+.customer-rev ul li {
+    list-style: none;
+}
+
+.customer-rev ul li a span {
+    color: #a4a6a9;
+    font-weight: normal;
+    margin-right: 4px;
+}
+
+form.w3layouts-newsletter {
+    display: flex;
+    margin-bottom: 2.5em;
+}
+
+ul.w3layouts-box-list li {
+    list-style: none;
+    display: block;
+    margin-bottom: 0.9em;
+    color: #8c9398;
+    letter-spacing: 1px;
+    font-size: 0.9em;
+}
+
+.w3layouts-newsletter button.btn1 {
+    color: #ff4c4c;
+    font-size: 17px;
+    letter-spacing: 1px;
+    padding: 14px 0;
+    border: transparent;
+    text-transform: uppercase;
+    -webkit-transition: 0.5s all;
+    -moz-transition: 0.5s all;
+    transition: 0.5s all;
+    background: #1e272e;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 0;
+    padding: 0.7em 2em;
 }

@@ -8,13 +8,12 @@ interface ISidebarProps {
 const Sidebar: React.FunctionComponent<ISidebarProps> = (props) => {
   return (
 <div className="side-bar col-lg-3">
-
     <div className="search-bar w3layouts-newsletter">
         <h3 className="sear-head editContent">Поиск аниме</h3>
-        {/* <form action="{% url 'search' %}" method="get" className="d-flex editContent">
-            <input type="search" placeholder="Введите название..." name="q" class="form-control" required="">
-            <button class="btn1 btn" type="submit"><span class="fa fa-search" aria-hidden="true"></span></button>
-        </form> */}
+        <form action="{% url 'search' %}" method="get" className="d-flex editContent">
+            <input type="search" placeholder="Введите название..." name="q" className="form-control" />
+            <button className="btn1 btn" type="submit"><span className="fa fa-search" aria-hidden="true"></span></button>
+        </form>
     </div>
     <form action="{% url 'filter' %}" method="get" name="filter">
 
@@ -36,6 +35,7 @@ const Sidebar: React.FunctionComponent<ISidebarProps> = (props) => {
             <ul className="w3layouts-box-list">
 
                 <li className="editContent">
+                    <input type="checkbox" className="checked" name="year"/>
                     {/* <input type="checkbox" className="checked" name="year" value="{{ anime.year }}"> */}
                     <span className="span editContent"> anime.year </span>  
                 </li>

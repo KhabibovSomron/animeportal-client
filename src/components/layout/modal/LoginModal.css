@@ -1,0 +1,17 @@
+.modal-container-button {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.button-modal {
+    width: 200px;
+}
+
+
+@media(max-width:440px) {
+ 
+    .button-modal {
+        width: 130px;
+    }
+}

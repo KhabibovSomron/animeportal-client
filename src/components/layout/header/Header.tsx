@@ -1,32 +1,36 @@
-import React, {FC, useState} from 'react';
+import React, { FC, useState } from 'react';
 import {
-    MDBContainer,
-    MDBNavbar,
-    MDBNavbarBrand,
-    MDBNavbarToggler,
-    MDBIcon,
-    MDBNavbarNav,
-    MDBNavbarItem,
-    MDBNavbarLink,
-    MDBBtn,
-    MDBDropdown,
-    MDBDropdownToggle,
-    MDBDropdownMenu,
-    MDBDropdownItem,
-    MDBDropdownLink,
-    MDBCollapse
-  } from 'mdb-react-ui-kit';
+  MDBContainer,
+  MDBNavbar,
+  MDBNavbarBrand,
+  MDBNavbarToggler,
+  MDBIcon,
+  MDBNavbarNav,
+  MDBNavbarItem,
+  MDBNavbarLink,
+  MDBBtn,
+  MDBDropdown,
+  MDBDropdownToggle,
+  MDBDropdownMenu,
+  MDBDropdownItem,
+  MDBDropdownLink,
+  MDBCollapse,
+} from 'mdb-react-ui-kit';
+import LoginModal from '../modal/LoginModal';
 interface IHeaderProps {
 
 }
 
 const Header: FC<IHeaderProps> = (props) => {
 
-    const [showBasic, setShowBasic] = useState(false);
-    return(
-        <MDBNavbar expand='lg' light bgColor='light'>
-      <MDBContainer fluid>
-        <MDBNavbarBrand href='#' style={{fontWeight: 700}}>AnimePortal</MDBNavbarBrand>
+  const [showBasic, setShowBasic] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleShow = () => setShowModal(!showModal);
+  return (
+    <MDBNavbar expand='lg' light bgColor='light'>
+      <MDBContainer fluid style={{margin:'0 30px'}}>
+        <MDBNavbarBrand href='#' style={{ fontWeight: 700 }}>AnimePortal</MDBNavbarBrand>
 
         <MDBNavbarToggler
           aria-controls='navbarSupportedContent'
@@ -57,15 +61,12 @@ const Header: FC<IHeaderProps> = (props) => {
               </MDBDropdown>
             </MDBNavbarItem>
           </MDBNavbarNav>
-
-          <form className='d-flex input-group w-auto'>
-            <input type='search' className='form-control' placeholder='Поиск аниме' aria-label='Search' />
-            <MDBBtn color='primary'>Поиск</MDBBtn>
-          </form>
+          <button className='btn btn-dark' onClick={toggleShow}>Войти</button>
+          <LoginModal showModal={showModal} setShowModal={setShowModal} />
         </MDBCollapse>
       </MDBContainer>
     </MDBNavbar>
-    );
+  );
 };
 
 export default Header;
