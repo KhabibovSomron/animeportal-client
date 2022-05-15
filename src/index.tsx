@@ -1,19 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Layout from './components/layout/Layout';
-import Home from './components/pages/home/Home';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AnimeDetail from './components/pages/anime-detail/AnimeDetail';
+import { BrowserRouter } from 'react-router-dom';
+import Adapter from './components/routes/Adapter';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Layout>
-      {/* <Home /> */}
-      <AnimeDetail />
-    </Layout>
+    <BrowserRouter>
+      <Layout>
+      <Adapter />        
+
+      </Layout>
+
+    </BrowserRouter>
+
   </React.StrictMode>
 );
