@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react';
+import  { FC } from 'react';
 import {
     MDBModal,
     MDBModalDialog,
@@ -6,12 +6,10 @@ import {
     MDBModalHeader,
     MDBModalBody,
     MDBModalFooter,
-    MDBIcon,
-    MDBRange
+    MDBIcon
 } from 'mdb-react-ui-kit';
 import ReactPlayer from 'react-player'
 import './VideoModal.css';
-import { dividerClasses } from '@mui/material';
 
 
 interface IVideoModalProps {

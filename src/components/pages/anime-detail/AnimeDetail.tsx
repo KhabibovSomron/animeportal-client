@@ -1,7 +1,50 @@
-import React, { FC, useState } from 'react';
+import axios from 'axios';
+import { FC, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { ANIME_DETAIL_URL } from '../../../endpoints';
 import VideoModal from '../../layout/modal/modal-video/VideoModal';
 import EpisodeCard from '../../UI/EpisodeCard/EpisodeCard';
 import './AnimeDetail.css'
+
+export interface IEpisode {
+    id: number,
+    title: string,
+    number: number,
+    image: string,
+    video: string
+}
+
+interface ISeason {
+    id: number,
+    episodes: IEpisode[],
+    number: number,
+    year: number,
+    title: string
+}
+
+interface IAnimeDetail {
+    id: number,
+    genres: string[],
+    seasons: ISeason[],
+    title: string,
+    description: string,
+    poster: string,
+    url: string,
+    trailer: string
+}
+
+const defaultValue: IAnimeDetail = {
+    id: 0,
+    genres: [],
+    seasons: [],
+    title: "",
+    description: "",
+    poster: "",
+    url: "",
+    trailer: ""
+}
+
+
 interface IAnimeDetailProps {
 }
 
@@ -9,19 +52,29 @@ const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
 
     const [showModal, setShowModal] = useState(false);
     const toggleShow = () => setShowModal(!showModal);
-    const videoPlayerOptions = {
-        controls: true,
-        sources: [{
-            src: "http://127.0.0.1:8000/stream/1/",
-            type: "video/mp4"
-        }]
-    }
+    const params = useParams()
+    const [anime, setAnime] = useState<IAnimeDetail>(defaultValue)
+
+    useEffect(() => {
+        const fetchAnimeDetail = async () => {
+            try {
+                const res = await axios.get(ANIME_DETAIL_URL + `${params.id}`)
+                console.log(res.data)
+                setAnime(res.data)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+        fetchAnimeDetail()
+    }, [])
+
     return (
         <div className='left-ads-display col-lg-8'>
             <div className="body">
                 <div className="hero-heading-line">
                     <h1 className="c-heading c-heading--l c-heading--family-type-one title">
-                        Фена: Принцесса пиратов
+                        {anime.title}
                     </h1>
                     <div className="heading-share-button"></div>
                 </div>
@@ -37,45 +90,45 @@ const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
                 </div>
                 <ul className='table-detail'>
                     <li>
-                    <span><b>Год выпуска:</b> 2016</span>
+                        <span><b>Год выпуска:</b> {anime.seasons.map(season => season.year)}</span>
                     </li>
                     <li>
-                    <span><b>Главные герои:</b>
-                    <a href="{{ character.get_absolute_url }}">Томиёка Гию</a>
-                </span>
+                        <span><b>Главные герои:</b>
+                            <a href="{{ character.get_absolute_url }}">Томиёка Гию</a>
+                        </span>
                     </li>
                     <li>
-                    <span><b>Жанры:</b>
-                    Романтика
-                    </span>
+                        <span><b>Жанры:</b>
+                            {anime.genres.map((genre, index) => <span key={index}> {genre} </span>)}
+                        </span>
                     </li>
                     <li>
-                    <form action="{% url 'add_rating' %}" method="post" name="rating">
-                    <b>Рейтинг:</b>
-                    <input type="hidden" value="{{ anime.id }}" name="anime" />
-                    <span className="rating">
-                        <input id="rating{{ v }}" type="radio" name="star" value="{{ k }}" />
-                        <label htmlFor="rating{{ v }}"></label>
-                    </span>
-                    <span className="editContent">5</span>
-                </form>
+                        <form action="{% url 'add_rating' %}" method="post" name="rating">
+                            <b>Рейтинг:</b>
+                            <input type="hidden" value="{{ anime.id }}" name="anime" />
+                            <span className="rating">
+                                <input id="rating{{ v }}" type="radio" name="star" value="{{ k }}" />
+                                <label htmlFor="rating{{ v }}"></label>
+                            </span>
+                            <span className="editContent">5</span>
+                        </form>
                     </li>
                 </ul>
-                
-                
-                
+
+
+
 
             </div>
             <div className="row sub-para-w3layouts mt-5">
                 <p>
-                    <img src="" className="img-anime-shots" alt="image.description" />
+                    <img src="" className="img-anime-shots" alt="" />
                 </p>
                 <p className="editContent">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus quisquam, repellat, voluptates mollitia dignissimos similique numquam eaque recusandae, ipsam officia perferendis facere soluta. Illum officia libero illo nulla asperiores? Molestias.
+                    {anime.description}
                 </p>
                 <p className="mt-3 italic-blue editContent">
-                    <iframe width="560" height="315"
-                        src="https://www.youtube.com/embed/NooIc3dMncc"
+                    <iframe width="560" height="315" title='trailer'
+                        src={anime.trailer}
                         frameBorder={0} allow="accelerometer; autoplay;
                                                                encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen>
@@ -86,20 +139,23 @@ const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
             <hr />
             <div className='anime-container'>
                 <h1 className="c-heading c-heading--l c-heading--family-type-one title" style={{ textAlign: 'center' }}>
-                    Смотреть твоё имя все серии
+                    Смотреть {anime.title} все серии
                 </h1>
                 <hr />
-                <div className='sesson-container'>
-                    <h1 className="c-heading c-heading--l c-heading--family-type-one title" style={{ textAlign: 'center', fontSize: '20px' }}>
-                        1 сезон
-                    </h1>
-                    <div className='episode'>
-                        <EpisodeCard toggleShow={toggleShow}/>
-                        <EpisodeCard toggleShow={toggleShow}/>
-                        <EpisodeCard toggleShow={toggleShow}/>
+                {anime.seasons.map((season, index) =>
+                    <div className='sesson-container' key={index}>
+                        <h1 className="c-heading c-heading--l c-heading--family-type-one title" style={{ textAlign: 'center', fontSize: '20px' }}>
+                            {season.title}
+                        </h1>
+                        <div className='episode'>
+                            {season.episodes.map((episode, index) => 
+                                <EpisodeCard key={index} episode={episode} animeName={anime.title} />
+                            )}
+                        </div>
+                        <hr />
                     </div>
-                    <VideoModal showModal={showModal} setShowModal={setShowModal} />
-                </div>
+                )}
+
             </div>
         </div>
     );

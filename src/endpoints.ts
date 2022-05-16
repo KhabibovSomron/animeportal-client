@@ -1,0 +1,5 @@
+export const ANIME_LIST_URL = "http://localhost:8000/anime/animelist/"
+export const GENRES_URL = "http://localhost:8000/anime/genres/"
+export const YEARS_URL = "http://localhost:8000/anime/years/"
+export const BASE_URL = "http://localhost:8000"
+export const ANIME_DETAIL_URL = "http://localhost:8000/anime/anime-detail/"

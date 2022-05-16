@@ -37,6 +37,11 @@ ul.w3layouts-box-list li {
     font-size: 0.9em;
 }
 
+.left-side {
+    display: flex;
+    flex-direction: column;
+}
+
 .w3layouts-newsletter button.btn1 {
     color: #ff4c4c;
     font-size: 17px;

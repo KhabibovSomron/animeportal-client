@@ -4,16 +4,10 @@ import {
     MDBModalDialog,
     MDBModalContent,
     MDBModalHeader,
-    MDBModalTitle,
     MDBModalBody,
     MDBModalFooter,
-    MDBBtn,
-    MDBTabs,
-    MDBTabsItem,
-    MDBTabsLink,
     MDBTabsContent,
     MDBTabsPane,
-    MDBInput
 } from 'mdb-react-ui-kit';
 import './LoginModal.css'
 interface ILoginModalProps {

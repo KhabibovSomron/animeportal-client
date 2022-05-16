@@ -3,15 +3,15 @@ import ReactDOM from 'react-dom/client';
 import Layout from './components/layout/Layout';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AnimeDetail from './components/pages/anime-detail/AnimeDetail';
 import { BrowserRouter } from 'react-router-dom';
 import Adapter from './components/routes/Adapter';
+import { Provider } from 'react-redux';
+import Store from './redux/Store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
     <BrowserRouter>
       <Layout>
       <Adapter />        
@@ -19,6 +19,4 @@ root.render(
       </Layout>
 
     </BrowserRouter>
-
-  </React.StrictMode>
 );
