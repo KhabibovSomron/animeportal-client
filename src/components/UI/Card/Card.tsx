@@ -11,7 +11,7 @@ interface ICardProps {
 
 const Card: FC<ICardProps> = ({ id, name, url, poster }) => {
     return (
-        <Link to={`anime/${id}/${url}`}>
+        <Link to={`anime/${id}/${name}`}>
             <div className="card card-dv">
                 <img src={BASE_URL + poster} className='card-img-top' alt="" />
                 <div className="card-body">

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AnimeDetail from '../pages/anime-detail/AnimeDetail';
+import AnimePlayer from '../pages/anime-player/AnimePlayer';
 import Home from '../pages/home/Home';
 
 interface IAdapterProps {
@@ -12,6 +13,7 @@ const Adapter: FC<IAdapterProps> = (props) => {
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="anime/:id/:url/" element={<AnimeDetail />} />
+            <Route path="anime/:id/:url/anime-episode/:episode_id" element={<AnimePlayer />} />
         </Routes>
     );
 };

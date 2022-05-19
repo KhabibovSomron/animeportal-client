@@ -17,7 +17,7 @@ export interface IAnimeListFail {
 
 export interface IAnimeListSuccess {
     type: typeof ANIME_LIST_SUCCESS,
-    payload: IAnimeList[]
+    payload: IAnimeLists[]
 }
 
 export type AnimeListDispatchType = IAnimeListLoading | IAnimeListFail | IAnimeListSuccess;

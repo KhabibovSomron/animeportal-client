@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../../endpoints';
 import { IEpisode } from '../../pages/anime-detail/AnimeDetail';
 import './EpisodeCard.css';
@@ -9,6 +10,7 @@ interface IEpisodeCardProps {
 
 const EpisodeCard: FC<IEpisodeCardProps> = ({episode, animeName}) => {
     return (
+        <Link to={`anime-episode/${episode.id}`}>
         <div className="card card-dv">
             <div className='card-img-top bg-1'>
             <img className='img-background' src={BASE_URL + episode.image} alt={episode.title} />
@@ -23,6 +25,7 @@ const EpisodeCard: FC<IEpisodeCardProps> = ({episode, animeName}) => {
                 </div>
             </div>
         </div>
+        </Link>
     );
 };
 
