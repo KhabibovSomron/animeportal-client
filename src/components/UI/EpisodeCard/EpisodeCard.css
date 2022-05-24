@@ -1,10 +1,11 @@
 * {
     font-family: Lato, Helvetica Neue, helvetica, sans-serif;
 }
-.card-dv {
+.card-dv-episode {
     margin: 10px;
     width: 18rem;
     transition: all, .3s;
+    height: auto;
 }
 
 .card-dv:hover {
@@ -64,4 +65,8 @@ height: 200px;
 .c-meta-tags__tag {
     display: inline;
     position: relative;
+}
+
+.card-body {
+    flex: none;
 }

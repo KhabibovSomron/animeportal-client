@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { ANIME_DETAIL_URL } from '../../../endpoints';
+import { ANIME_DETAIL_URL, BASE_URL, RATING_STAR_URL, SHOTS_URL } from '../../../endpoints';
 import VideoModal from '../../layout/modal/modal-video/VideoModal';
 import EpisodeCard from '../../UI/EpisodeCard/EpisodeCard';
 import './AnimeDetail.css'
@@ -44,6 +44,17 @@ const defaultValue: IAnimeDetail = {
     trailer: ""
 }
 
+interface IRatingStar {
+    id: number,
+    value: number
+}
+
+interface IShots {
+    id: number,
+    title: string,
+    image: string
+}
+
 
 interface IAnimeDetailProps {
 }
@@ -54,6 +65,8 @@ const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
     const toggleShow = () => setShowModal(!showModal);
     const params = useParams()
     const [anime, setAnime] = useState<IAnimeDetail>(defaultValue)
+    const [ratingStar, setRatingStar] = useState<IRatingStar[]>([])
+    const [shots, setShots] = useState<IShots[]>([])
 
     useEffect(() => {
         const fetchAnimeDetail = async () => {
@@ -66,8 +79,29 @@ const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
             }
         }
 
+        const fetchRatingStar = async () => {
+            try {
+                const res = await axios.get(RATING_STAR_URL)
+                setRatingStar(res.data)
+            } catch (err) {
+                console.log(err)
+            }
+        }
         fetchAnimeDetail()
+        fetchRatingStar()
     }, [])
+
+    useEffect(() => {
+        const fetchShots = async () => {
+            try {
+                const res = await axios.get(SHOTS_URL + `${anime.id}/`)
+                setShots(res.data)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        fetchShots()
+    }, [anime])
 
     return (
         <div className='left-ads-display col-lg-8'>
@@ -105,23 +139,24 @@ const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
                     <li>
                         <form action="{% url 'add_rating' %}" method="post" name="rating">
                             <b>Рейтинг:</b>
-                            <input type="hidden" value="{{ anime.id }}" name="anime" />
-                            <span className="rating">
-                                <input id="rating{{ v }}" type="radio" name="star" value="{{ k }}" />
-                                <label htmlFor="rating{{ v }}"></label>
-                            </span>
-                            <span className="editContent">5</span>
+                            <input type="hidden" value={anime.id} name="anime" />
+                            {ratingStar.map(star =>
+                                <span className="rating" key={star.id}>
+                                    <input id={`rating${star.value}`} type="radio" name="star" value={star.id} />
+                                    <label htmlFor={`rating${star.value}`}></label>
+                                </span>
+                            )}
                         </form>
                     </li>
                 </ul>
-
-
-
-
             </div>
             <div className="row sub-para-w3layouts mt-5">
+                <h1 className='c-heading c-heading--l c-heading--family-type-one title'>Кадры из аниме {anime.title}</h1>
                 <p>
-                    <img src="" className="img-anime-shots" alt="" />
+                    {shots.map(shot =>
+                        <img src={BASE_URL + shot.image} className="img-anime-shots" alt={shot.title} key={shot.id}  style={{margin: '10px'}}/>
+                    )}
+
                 </p>
                 <p className="editContent">
                     {anime.description}
@@ -148,7 +183,7 @@ const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
                             {season.title}
                         </h1>
                         <div className='episode'>
-                            {season.episodes.map((episode, index) => 
+                            {season.episodes.map((episode, index) =>
                                 <EpisodeCard key={index} episode={episode} animeName={anime.title} />
                             )}
                         </div>

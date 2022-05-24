@@ -1,68 +1,36 @@
 import React, { FC, useEffect, useState } from 'react';
 import './Sidebar.css'
-import axios from 'axios';
-import { GENRES_URL, YEARS_URL } from '../../../endpoints';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { RootStoreType } from './../../../redux/Store'
-import { IFilterGenre, setFilterGenresAction } from '../../../redux/reducers/FilterGenresReducer';
-import ReactPlayer from 'react-player';
-import { setSearchTitleAction } from '../../../redux/reducers/SearchTitleReducer';
-
-interface IGenres {
-    id: number,
-    name: string,
-    url: string
-}
-
-interface IYears {
-    year: number
-}
+import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+import { filterSearchSlice } from '../../../redux/reducers/FilterSearchSlices';
+import { fetchGenres } from '../../../redux/actions/AnimeActions';
 
 interface ISidebarProps {
 }
 
 const Sidebar: FC<ISidebarProps> = (props) => {
 
-    const [genres, setGenres] = useState<IGenres[]>([])
+    const dispatch = useAppDispatch()
+    const genres = useAppSelector(state => state.animeList.genres)
     const [title, setTitle] = useState<string>("")
     useEffect(() => {
-        const fetchGenres = async () => {
-            try {
-                const res = await axios.get(GENRES_URL)
-                setGenres(res.data)
-
-            } catch (err) {
-                console.log(err)
-            }
-        }
-
-        fetchGenres()
-     
+        dispatch(fetchGenres())
     }, [])
-
-
-    const dispatch = useDispatch()
-    const filterGenres: IFilterGenre = useSelector((state: RootStoreType) => state.filterGenres)
 
     const onGenrePeek = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            filterGenres.genres.push(event.target.value)
-            dispatch(setFilterGenresAction(filterGenres))
+            dispatch(filterSearchSlice.actions.setFilter(Number(event.target.value)))
         } else {
-            filterGenres.genres = filterGenres.genres.filter(item => item !== event.target.value)
-            dispatch(setFilterGenresAction(filterGenres))
+            dispatch(filterSearchSlice.actions.removeFilter(Number(event.target.value)))
         }
     }
 
     const onSearchChangeInput = (event:React.ChangeEvent<HTMLInputElement>) => {
-        
         setTitle(event.target.value)
     }
 
     const onClickSearchButton = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        dispatch(setSearchTitleAction({title: title}))
+        dispatch(filterSearchSlice.actions.setSearch(title))
     }
 
     return (
