@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
     MDBModal,
     MDBModalDialog,
@@ -9,7 +9,7 @@ import {
     MDBTabsContent,
 } from 'mdb-react-ui-kit';
 import './ResetPasswordModal.css'
-import { useAppDispatch } from '../../../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHooks';
 import { resetPassword } from '../../../../redux/actions/UserActions';
 
 interface IResetPasswordModalProps {
@@ -20,18 +20,24 @@ interface IResetPasswordModalProps {
 const ResetPasswordModal: FC<IResetPasswordModalProps> = ({ showModal, setShowModal }) => {
 
     const toggleShow = () => setShowModal(!showModal);
-    
-
+    const user = useAppSelector(state => state.user)
     const [email, setEmail] = useState<string>("")
-    let status: boolean = false
     const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (user.error === '') {
+            setShowModal(false)
+        } else {
+            alert(user.error)
+        }
+    }, [user.resetPasswordTrigger])
 
     const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value)
     }
 
     const onResetPasswordClick = () => {
-        
+        dispatch(resetPassword(email))
     }
 
     return (
@@ -50,7 +56,7 @@ const ResetPasswordModal: FC<IResetPasswordModalProps> = ({ showModal, setShowMo
                                     <label htmlFor='emailLoginInput' className="form-label">Электронная почта</label>
                                     <input type="email" className="form-control" id="emailLoginInput" placeholder="name@example.com" onChange={onEmailChange} />
                                 </div>
-                                <button className="btn btn-dark" style={{ width: '100%' }} >Отправить</button>
+                                <button className="btn btn-dark" style={{ width: '100%' }} onClick={onResetPasswordClick} > Отправить</button>
                         </MDBTabsContent>
                     </MDBModalBody>
 

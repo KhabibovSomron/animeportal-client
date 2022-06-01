@@ -2,7 +2,6 @@ import axios from 'axios';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ANIME_DETAIL_URL, BASE_URL, RATING_STAR_URL, SHOTS_URL } from '../../../endpoints';
-import VideoModal from '../../layout/modal/modal-video/VideoModal';
 import EpisodeCard from '../../UI/EpisodeCard/EpisodeCard';
 import './AnimeDetail.css'
 
@@ -61,8 +60,6 @@ interface IAnimeDetailProps {
 
 const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
 
-    const [showModal, setShowModal] = useState(false);
-    const toggleShow = () => setShowModal(!showModal);
     const params = useParams()
     const [anime, setAnime] = useState<IAnimeDetail>(defaultValue)
     const [ratingStar, setRatingStar] = useState<IRatingStar[]>([])
@@ -89,7 +86,7 @@ const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
         }
         fetchAnimeDetail()
         fetchRatingStar()
-    }, [])
+    }, [params.id])
 
     useEffect(() => {
         const fetchShots = async () => {

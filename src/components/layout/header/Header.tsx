@@ -17,11 +17,9 @@ import {
 } from 'mdb-react-ui-kit';
 import LoginModal from '../modal/LoginModal';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { CATEGORIES_URL } from '../../../endpoints';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { fetchCategories } from '../../../redux/actions/AnimeActions';
-import { loadUser, logout } from '../../../redux/actions/UserActions';
+import {  logout } from '../../../redux/actions/UserActions';
 
 interface IHeaderProps {
 

@@ -11,7 +11,7 @@ import {
 } from 'mdb-react-ui-kit';
 import './LoginModal.css'
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
-import { login } from '../../../redux/actions/UserActions';
+import { login, signUp } from '../../../redux/actions/UserActions';
 import ResetPasswordModal from './reset-password/ResetPasswordModal';
 
 interface ILoginModalProps {
@@ -23,11 +23,17 @@ const LoginModal: FC<ILoginModalProps> = ({ showModal, setShowModal }) => {
 
     const toggleShow = () => setShowModal(!showModal);
     const [justifyActive, setJustifyActive] = useState<string>('login');
-    const user = useAppSelector(state => state.user)
     const [showPasswordReset, setShowPasswordReset] = useState<boolean>(false)
+
+    const user = useAppSelector(state => state.user)
+    const dispatch = useAppDispatch()
+    
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const dispatch = useAppDispatch()
+    const [rePassword, setRePassword] = useState<string>("")
+    const [name, setName] = useState<string>("")
+    
+    
 
     useEffect(() => {
         if (user.isAuthenticated) {
@@ -43,12 +49,26 @@ const LoginModal: FC<ILoginModalProps> = ({ showModal, setShowModal }) => {
         setPassword(event.target.value)
     }
 
+    const onRePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRePassword(event.target.value)
+    }
+
+    const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setName(event.target.value)
+    }
+
     const onLoginClick = () => {
         dispatch(login(email, password))        
     }
 
     const onRegisterClick = () => {
-        //pass
+        if (password === rePassword) {
+            dispatch(signUp(name, email, password, rePassword))    
+            setShowModal(false)
+        } else {
+            alert("Пароли не совпадают!")
+        }
+        
     }
 
     const onResetPasswordClick = () => {
@@ -100,19 +120,19 @@ const LoginModal: FC<ILoginModalProps> = ({ showModal, setShowModal }) => {
                             <MDBTabsPane show={justifyActive === 'register'}>
                             <div className="mb-3">
                                     <label htmlFor='usernameRegisterInput' className="form-label">Username</label>
-                                    <input type="text" maxLength={30} className="form-control" id="usernameRegisterInput" placeholder="" />
+                                    <input type="text" maxLength={30} className="form-control" id="usernameRegisterInput" placeholder="" onChange={onNameChange} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor='emailRegisterInput' className="form-label">Электронная почта</label>
-                                    <input type="email" className="form-control" id="emailRegisterInput" placeholder="name@example.com" />
+                                    <input type="email" className="form-control" id="emailRegisterInput" placeholder="name@example.com" onChange={onEmailChange} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="inputPasswordRegister" className="form-label">Пароль</label>
-                                    <input type="password" className="form-control" id="inputPasswordRegister" />
+                                    <input type="password" className="form-control" id="inputPasswordRegister" onChange={onPasswordChange} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="inputPasswordRegisterConfirm" className="form-label">Повторить пароль</label>
-                                    <input type="password" className="form-control" id="inputPasswordRegisterConfirm" />
+                                    <input type="Repeat Password" className="form-control" id="inputPasswordRegisterConfirm" onChange={onRePasswordChange} />
                                 </div>
                                 <button className="btn btn-dark" style={{ width: '100%' }} onClick={onRegisterClick} >Регистрация</button>
                             </MDBTabsPane>
