@@ -66,20 +66,20 @@ const Footer: FC<IFooterProps> = (props) => {
             </div>
 
             <div className='col-md-3 col-lg-2 col-xl-2 mx-auto mb-4'>
-              <h6 className='text-uppercase fw-bold mb-4'>Useful links</h6>
+              <h6 className='text-uppercase fw-bold mb-4'>Полезные ссылки</h6>
               <p>
                 <a href='#!' className='text-reset'>
-                  Pricing
+                  Подписки
                 </a>
               </p>
               <p>
                 <a href='#!' className='text-reset'>
-                  Settings
+                  Аккаунт
                 </a>
               </p>
               <p>
                 <a href='#!' className='text-reset'>
-                  Orders
+                  Заказы
                 </a>
               </p>
             </div>

@@ -1,10 +1,16 @@
-import {createStore, applyMiddleware} from 'redux';
-import RootReducer from './RootReducer';
-import {composeWithDevTools} from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit'
+import animeListReducer from './reducers/AnimeSlices'
+import filterSearchReducer from './reducers/FilterSearchSlices'
+import userReducer from './reducers/UserSlices'
 
-const Store = createStore(RootReducer, composeWithDevTools(applyMiddleware(thunk)))
+const store = configureStore({
+    reducer: {
+        animeList: animeListReducer,
+        filterSearch: filterSearchReducer,
+        user: userReducer
+    },
+})
 
-export type RootStoreType = ReturnType<typeof RootReducer>
-
-export default Store
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
+export default store

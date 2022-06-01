@@ -24,6 +24,11 @@ h2 {
     z-index: 1;
 }
 
+.progressSlider {
+    width: 100%;
+    position: relative;
+}
+
 .grid-row-video-top {
     display: flex;
     justify-content: space-between;

@@ -3,6 +3,14 @@
     width: 20rem;
 }
 
+img {
+    height: 400px;
+}
+
+.card-body {
+    border: 1px solid gray;
+}
+
 h5 {
 text-align: center;
 text-decoration: underline;
