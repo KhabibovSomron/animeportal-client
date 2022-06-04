@@ -1,58 +1,14 @@
-import axios from 'axios';
-import { FC, useEffect, useMemo, useState } from 'react';
+
+import { FC, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { ANIME_DETAIL_URL, BASE_URL, RATING_STAR_URL, SHOTS_URL } from '../../../endpoints';
+import { BASE_URL } from '../../../endpoints';
+import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
+import { fetchAnimeDetails, fetchAnimeShots, fetchFilms } from '../../../redux/actions/AnimeDetailAction';
 import EpisodeCard from '../../UI/EpisodeCard/EpisodeCard';
+import FilmCard from '../../UI/Film-Card/FilmCard';
 import './AnimeDetail.css'
 
-export interface IEpisode {
-    id: number,
-    title: string,
-    number: number,
-    image: string,
-    video: string
-}
 
-interface ISeason {
-    id: number,
-    episodes: IEpisode[],
-    number: number,
-    year: number,
-    title: string
-}
-
-interface IAnimeDetail {
-    id: number,
-    genres: string[],
-    seasons: ISeason[],
-    title: string,
-    description: string,
-    poster: string,
-    url: string,
-    trailer: string
-}
-
-const defaultValue: IAnimeDetail = {
-    id: 0,
-    genres: [],
-    seasons: [],
-    title: "",
-    description: "",
-    poster: "",
-    url: "",
-    trailer: ""
-}
-
-interface IRatingStar {
-    id: number,
-    value: number
-}
-
-interface IShots {
-    id: number,
-    title: string,
-    image: string
-}
 
 
 interface IAnimeDetailProps {
@@ -61,50 +17,21 @@ interface IAnimeDetailProps {
 const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
 
     const params = useParams()
-    const [anime, setAnime] = useState<IAnimeDetail>(defaultValue)
-    const [ratingStar, setRatingStar] = useState<IRatingStar[]>([])
-    const [shots, setShots] = useState<IShots[]>([])
+    const dispatch = useAppDispatch()
+    const anime = useAppSelector(state => state.animeDetail)
 
     useEffect(() => {
-        const fetchAnimeDetail = async () => {
-            try {
-                const res = await axios.get(ANIME_DETAIL_URL + `${params.id}`)
-                console.log(res.data)
-                setAnime(res.data)
-            } catch (err) {
-                console.log(err)
-            }
-        }
+        dispatch(fetchAnimeDetails(Number(params.id)))
+        dispatch(fetchAnimeShots(Number(params.id)))
+        dispatch(fetchFilms(Number(params.id)))
+    }, [])
 
-        const fetchRatingStar = async () => {
-            try {
-                const res = await axios.get(RATING_STAR_URL)
-                setRatingStar(res.data)
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        fetchAnimeDetail()
-        fetchRatingStar()
-    }, [params.id])
-
-    useEffect(() => {
-        const fetchShots = async () => {
-            try {
-                const res = await axios.get(SHOTS_URL + `${anime.id}/`)
-                setShots(res.data)
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        fetchShots()
-    }, [anime])
-
-    const videoCount =  useMemo(() => {
+    const videoCount = useMemo(() => {
         let value = 0
-        anime.seasons.forEach((season) => {
+        anime.details.seasons.forEach((season) => {
             value += season.episodes.length
         })
+        value += anime.films.length
         return value
     }, [anime])
 
@@ -113,7 +40,7 @@ const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
             <div className="body">
                 <div className="hero-heading-line">
                     <h1 className="c-heading c-heading--l c-heading--family-type-one title">
-                        {anime.title}
+                        {anime.details.title}
                     </h1>
                     <div className="heading-share-button"></div>
                 </div>
@@ -123,47 +50,62 @@ const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
                             {videoCount} Видео
                         </span>
                         <span className="c-text c-text--m c-meta-tags__tag">
-                            18+
+                            {anime.details.ageRating}
                         </span>
                     </div>
                 </div>
                 <ul className='table-detail'>
                     <li>
-                        <span><b>Год выпуска:</b> {anime.seasons.map(season => season.year)}</span>
+                        <span><b>Год выпуска:</b> {anime.details.seasons.map((season, index) => {
+                            if (index === anime.details.seasons.length - 1) {
+                                return <span key={index}> {season.year}</span>
+                            } else {
+                                return <span key={index}> {season.year},</span>
+                            }
+                        }
+                        )}</span>
                     </li>
                     <li>
-                        <span><b>Жанры:</b>
-                            {anime.genres.map((genre, index) => <span key={index}> {genre} </span>)}
+                        <span> <b>Жанры:</b>
+                            {anime.details.genres.map((genre, index) => {
+                                if (index === anime.details.genres.length - 1) {
+                                    return <span key={index}> {genre}</span>
+                                } else {
+                                    return <span key={index}> {genre},</span>
+                                }
+                            }
+
+                            )}
                         </span>
                     </li>
-                    <li>
+                    {/* <li>
                         <form action="{% url 'add_rating' %}" method="post" name="rating">
                             <b>Рейтинг:</b>
                             <input type="hidden" value={anime.id} name="anime" />
-                            {ratingStar.map(star =>
+                            {anime.ratingStar.map(star =>
                                 <span className="rating" key={star.id}>
                                     <input id={`rating${star.value}`} type="radio" name="star" value={star.id} />
                                     <label htmlFor={`rating${star.value}`}></label>
                                 </span>
                             )}
                         </form>
-                    </li>
+                    </li> */}
                 </ul>
             </div>
             <div className="row sub-para-w3layouts mt-5">
-                <h1 className='c-heading c-heading--l c-heading--family-type-one title'>Кадры из аниме {anime.title}</h1>
+                <h1 className='c-heading c-heading--l c-heading--family-type-one title'>Кадры из аниме {anime.details.title}</h1>
                 <p>
-                    {shots.map(shot =>
-                        <img src={BASE_URL + shot.image} className="img-anime-shots" alt={shot.title} key={shot.id}  style={{margin: '10px'}}/>
+                    {anime.shots.map(shot =>
+                        <img src={BASE_URL + shot.image} className="img-anime-shots" alt={shot.title} key={shot.id} style={{ margin: '10px' }} />
                     )}
 
                 </p>
                 <p className="editContent">
-                    {anime.description}
+                    {anime.details.description}
                 </p>
                 <p className="mt-3 italic-blue editContent">
                     <iframe width="560" height="315" title='trailer'
-                        src={anime.trailer}
+                        src={anime.details.trailer}
                         frameBorder={0} allow="accelerometer; autoplay;
                                                                encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen>
@@ -174,22 +116,38 @@ const AnimeDetail: FC<IAnimeDetailProps> = (props) => {
             <hr />
             <div className='anime-container'>
                 <h1 className="c-heading c-heading--l c-heading--family-type-one title" style={{ textAlign: 'center' }}>
-                    Смотреть {anime.title} все серии
+                    Смотреть {anime.details.title} все серии
                 </h1>
                 <hr />
-                {anime.seasons.map((season, index) =>
+                {anime.details.seasons.map((season, index) =>
                     <div className='sesson-container' key={index}>
                         <h1 className="c-heading c-heading--l c-heading--family-type-one title" style={{ textAlign: 'center', fontSize: '20px' }}>
                             {season.title}
                         </h1>
                         <div className='episode'>
                             {season.episodes.map((episode, index) =>
-                                <EpisodeCard key={index} episode={episode} animeName={anime.title} />
+                                <EpisodeCard key={index} episode={episode} animeName={anime.details.title} />
                             )}
                         </div>
                         <hr />
                     </div>
                 )}
+                {anime.films.length !== 0 ?
+                    <div className='sesson-container'>
+                        <h1 className="c-heading c-heading--l c-heading--family-type-one title" style={{ textAlign: 'center', fontSize: '25px' }}>
+                            Фильмы
+                        </h1>
+                        <hr/>
+                        <div className='episode'>
+                            {anime.films.map((film, index) =>
+                                <FilmCard key={index} film={film} animeName={anime.details.title} />
+                            )}
+                        </div>
+                        <hr />
+                    </div>
+                    : <>
+                    </>
+            }
 
             </div>
         </div>

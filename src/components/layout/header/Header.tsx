@@ -19,7 +19,7 @@ import LoginModal from '../modal/LoginModal';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { fetchCategories } from '../../../redux/actions/AnimeActions';
-import {  logout } from '../../../redux/actions/UserActions';
+import { logout } from '../../../redux/actions/UserActions';
 
 interface IHeaderProps {
 
@@ -80,15 +80,20 @@ const Header: FC<IHeaderProps> = (props) => {
               </MDBDropdown>
             </MDBNavbarItem>
           </MDBNavbarNav>
-          {user.isAuthenticated ?
-            <h2 style={{textAlignLast: 'start'}}>{user.user?.name}</h2> :
-            <button className='btn btn-dark' onClick={toggleShow}>Войти</button>
-          }
-
           {
-          user.isAuthenticated ?
-            <button className='btn btn-light' onClick={onLogOutClick} style={{padding:'0 10px'}}>Выйти</button>:
-            <></>
+            user.isAuthenticated ?
+          <MDBDropdown>
+          <MDBDropdownToggle tag='a' className='nav-link' style={{color:'gray'}}>
+            {user.user?.name}
+          </MDBDropdownToggle>
+          <MDBDropdownMenu>
+              <MDBDropdownItem>
+                <MDBDropdownLink onClick={onLogOutClick}>Выйти</MDBDropdownLink>
+              </MDBDropdownItem>
+          </MDBDropdownMenu>
+        </MDBDropdown>
+             :
+             <button className='btn btn-dark' onClick={toggleShow}>Войти</button>
           }
           <LoginModal showModal={showModal} setShowModal={setShowModal} />
         </MDBCollapse>

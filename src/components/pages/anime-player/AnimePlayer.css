@@ -63,6 +63,28 @@ h2 {
     padding: 16px;
 }
 
+.skip-con {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.skip-con > button {
+    padding: 10px 20px;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    font-size: 14px;
+    border: none;
+    transition: .3s all;
+}
+
+.skip-con > button:hover {
+    color: grey;
+    background-color: white;
+}
+
 .under-slider {
     width: 100%;
     display: flex;

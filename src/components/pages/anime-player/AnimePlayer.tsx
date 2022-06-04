@@ -4,10 +4,10 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useParams } from 'react-router-dom';
 import { EPISODE_URL } from '../../../endpoints';
-import { IEpisode } from '../anime-detail/AnimeDetail';
 import './AnimePlayer.css'
 import screenfull from 'screenfull'
 import {BaseReactPlayerProps} from 'react-player/base'
+import { IEpisode } from '../../../redux/types/AnimeType';
 
 interface IPlayerState {
     playing: boolean,
@@ -53,12 +53,17 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
         number: 0,
         title: "",
         video: "",
+        duration: 0,
+        end_opening: 0,
+        start_opening: 0
     })
 
     const playerContainerRef = useRef(null)
     const playerRef = useRef(null)
+    const [isSkipOpening, setIsSkipOpening] = useState<boolean>(false)
     let count = 0;
     const [contolVisibility, setControlVisibility] = useState<boolean>(true)
+    
     useEffect(() => {
         const fetchEpisodeData = async () => {
             try {
@@ -88,12 +93,30 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
         screenfull.toggle(playerContainerRef.current!)
     }
 
+    
+    const customGetCurrentTime = (curentPlayerRef: BaseReactPlayerProps): string => {
+        return curentPlayerRef ? curentPlayerRef.getCurrentTime() : '00: 00'
+    }
+
+    const customGetDuration = (curentPlayerRef: BaseReactPlayerProps): string => {
+        return curentPlayerRef ? curentPlayerRef.getDuration() : '00: 00'
+    }
+
+    const curentTime = customGetCurrentTime(playerRef.current!)
+    const elapsedTime = format(customGetCurrentTime(playerRef.current!))
+    const totalDuration = format(customGetDuration(playerRef.current!))
+
     const onProgressChange = (changeState: any) => {
         setPlayerState({...playerState, played: changeState.played, playedSeconds: changeState.playedSeconds})
         if (count > 0) {
             count --
         } else {
             setControlVisibility(false)
+        }
+        if (Number(curentTime) > episode.start_opening && Number(curentTime) < episode.start_opening + 25) {
+            setIsSkipOpening(true)
+        } else {
+            setIsSkipOpening(false)
         }
     }
 
@@ -103,16 +126,10 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
         }
     }
 
-    const customGetCurrentTime = (curentPlayerRef: BaseReactPlayerProps): string => {
-        return curentPlayerRef ? curentPlayerRef.getCurrentTime() : '00: 00'
+    const onSkipOpeningClick = () => {
+        seekToChange(playerRef.current!, episode.end_opening)
     }
 
-    const customGetDuration = (curentPlayerRef: BaseReactPlayerProps): string => {
-        return curentPlayerRef ? curentPlayerRef.getDuration() : '00: 00'
-    }
-
-    const elapsedTime = format(customGetCurrentTime(playerRef.current!))
-    const totalDuration = format(customGetDuration(playerRef.current!))
 
     const onProgressSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPlayerState({...playerState, played: parseFloat(event.target.value) / 100})
@@ -128,7 +145,7 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
     return (
         <div className='left-ads-display col-lg-8'>
             <hr />
-            <h2>{params.url} {episode.title}</h2>
+            <h2>{params.url} {episode.number} серия - {episode.title}</h2>
             <hr />
             <div ref={playerContainerRef} className='player-wrapper' onMouseMove={onMouseMoveHandler}>
                 <ReactPlayer width={"100%"} height={"100%"} url={`http://127.0.0.1:8000/stream/${episode.id}/`}
@@ -152,6 +169,15 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
                         </button>
                     </div>
                     <div className='grid-row-video-bottom'>
+                        <div className='skip-con'>
+                            <button style={
+                                isSkipOpening? {display:"block"}:
+                                {display: "none"}
+                        } onClick={onSkipOpeningClick}>Пропустить заставку</button>
+                            <button style={
+                                {display: "none"}
+                        }>Следующая серия</button>
+                        </div>
                         <input type="range" min={0} max={100} className='slider' value={playerState.played * 100} onChange={onProgressSliderChange} />
                         <div className='under-slider'>
                             <div className='left-side'>

@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import animeDetailReducer from './reducers/AnimeDetailSlices'
 import animeListReducer from './reducers/AnimeSlices'
 import filterSearchReducer from './reducers/FilterSearchSlices'
 import userReducer from './reducers/UserSlices'
@@ -7,7 +8,8 @@ const store = configureStore({
     reducer: {
         animeList: animeListReducer,
         filterSearch: filterSearchReducer,
-        user: userReducer
+        user: userReducer,
+        animeDetail: animeDetailReducer
     },
 })
 

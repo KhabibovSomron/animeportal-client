@@ -17,3 +17,6 @@ export const RESET_PASSWORD_URL = "http://localhost:8000/auth/users/reset_passwo
 export const CONFIRM_RESET_PASSWORD_URL = "http://localhost:8000/auth/users/reset_password_confirm/"
 export const USER_URL = "http://localhost:8000/auth/users/me"
 export const USER_VERIFY_URL = "http://localhost:8000/auth/jwt/verify/"
+export const ANIME_FILMS = "http://localhost:8000/anime/anime-films/"
+export const REVIEW_CREATE_URL = "http://localhost:8000/anime/create-review/"
+export const GET_REVIEWS_URL = "http://localhost:8000/anime/reviews/"
