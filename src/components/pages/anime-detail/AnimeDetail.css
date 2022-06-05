@@ -151,8 +151,27 @@ p.italic-blue {
 .episode {
     display: flex;
     justify-content: flex-start;
-    flex-wrap: wrap;
 }
+
+.body-comments-2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.body-comments-2 > h5 {
+    text-align: start;
+}
+
+.body-comments-2 > p {
+    padding: 0 30px;
+}
+
+.body-comments-2 > button {
+    width: 30%;
+    align-self: flex-end;
+}
+
 
 
 

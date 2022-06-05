@@ -1,0 +1,13 @@
+.body-padding-1 {
+    padding: 0 100px;
+}
+
+.body-comment {
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+}
+
+.body-comment > h5 {
+    text-align: start;
+}
