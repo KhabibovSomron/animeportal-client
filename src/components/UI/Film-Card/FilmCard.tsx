@@ -10,7 +10,7 @@ interface IFilmCardProps {
 
 const FilmCard: FC<IFilmCardProps> = ({film, animeName}) => {
     return (
-        <Link to={`anime-episode/${film.id}`}>
+        <Link to={`anime-film/${film.id}`}>
         <div className="card card-dv-episode">
             <div className='card-img-top bg-1'>
             <img className='img-background' src={BASE_URL + film.image} alt={film.title} />

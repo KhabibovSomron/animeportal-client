@@ -3,11 +3,11 @@ import { MDBIcon } from 'mdb-react-ui-kit';
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useParams } from 'react-router-dom';
-import { EPISODE_URL } from '../../../endpoints';
-import './AnimePlayer.css'
+import { FILM_URL } from '../../../endpoints';
+import './AnimePlayerFilm.css'
 import screenfull from 'screenfull'
 import {BaseReactPlayerProps} from 'react-player/base'
-import { IEpisode } from '../../../redux/types/AnimeType';
+import { IFilm } from '../../../redux/types/AnimeType';
 
 interface IPlayerState {
     playing: boolean,
@@ -17,7 +17,7 @@ interface IPlayerState {
     playedSeconds: number
 }
 
-interface IAnimePlayerProps {
+interface IAnimePlayerFilmProps {
 }
 
 const format = (seconds: any) => {
@@ -37,7 +37,7 @@ const format = (seconds: any) => {
     return `${mm}:${ss}`
 }
 
-const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
+const AnimePlayerFilm: FC<IAnimePlayerFilmProps> = (props) => {
 
     const [playerState, setPlayerState] = useState<IPlayerState>({
         playing: false,
@@ -47,15 +47,13 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
         playedSeconds: 0
     })
     const params = useParams()
-    const [episode, setEpisode] = useState<IEpisode>({
+    const [film, setFilm] = useState<IFilm>({
         id: 0,
         image: "",
         number: 0,
         title: "",
-        video: "",
-        duration: 0,
-        end_opening: 0,
-        start_opening: 0
+        file: "",
+        duration: 0
     })
 
     const playerContainerRef = useRef(null)
@@ -65,15 +63,15 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
     const [contolVisibility, setControlVisibility] = useState<boolean>(true)
     
     useEffect(() => {
-        const fetchEpisodeData = async () => {
+        const fetchFilmData = async () => {
             try {
-                const res = await axios.get(EPISODE_URL + `${params.episode_id}/`)
-                setEpisode(res.data)
+                const res = await axios.get(FILM_URL + `${params.film_id}/`)
+                setFilm(res.data)
             } catch (err) {
                 console.log(err)
             }
         }
-        fetchEpisodeData()
+        fetchFilmData()
     }, [])
 
     const playPausehandler = () => {
@@ -113,12 +111,6 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
         } else {
             setControlVisibility(false)
         }
-        if (episode.start_opening)
-        if (Number(curentTime) > episode.start_opening && Number(curentTime) < episode.start_opening + 25) {
-            setIsSkipOpening(true)
-        } else {
-            setIsSkipOpening(false)
-        }
     }
 
     const seekToChange = (curentPlayerRef: BaseReactPlayerProps, newValue: number) => {
@@ -126,11 +118,6 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
             curentPlayerRef.seekTo(newValue / 100)
         }
     }
-
-    const onSkipOpeningClick = () => {
-        seekToChange(playerRef.current!, episode.end_opening)
-    }
-
 
     const onProgressSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPlayerState({...playerState, played: parseFloat(event.target.value) / 100})
@@ -146,10 +133,10 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
     return (
         <div className='left-ads-display col-lg-8'>
             <hr />
-            <h2>{params.url} {episode.number} серия - {episode.title}</h2>
+            <h2>{params.url} {film.number} серия - {film.title}</h2>
             <hr />
             <div ref={playerContainerRef} className='player-wrapper' onMouseMove={onMouseMoveHandler}>
-                <ReactPlayer width={"100%"} height={"100%"} url={`http://127.0.0.1:8000/stream/${episode.id}/`}
+                <ReactPlayer width={"100%"} height={"100%"} url={`http://127.0.0.1:8000/stream/film/${film.id}/`}
                     ref={playerRef}
                     playing={playerState.playing}
                     muted={playerState.muted}
@@ -170,15 +157,6 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
                         </button>
                     </div>
                     <div className='grid-row-video-bottom'>
-                        <div className='skip-con'>
-                            <button style={
-                                isSkipOpening? {display:"block"}:
-                                {display: "none"}
-                        } onClick={onSkipOpeningClick}>Пропустить заставку</button>
-                            <button style={
-                                {display: "none"}
-                        }>Следующая серия</button>
-                        </div>
                         <input type="range" min={0} max={100} className='slider' value={playerState.played * 100} onChange={onProgressSliderChange} />
                         <div className='under-slider'>
                             <div className='left-side'>
@@ -211,4 +189,4 @@ const AnimePlayer: FC<IAnimePlayerProps> = (props) => {
     );
 };
 
-export default AnimePlayer;
+export default AnimePlayerFilm;

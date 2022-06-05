@@ -128,11 +128,11 @@ const LoginModal: FC<ILoginModalProps> = ({ showModal, setShowModal }) => {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="inputPasswordRegister" className="form-label">Пароль</label>
-                                    <input type="password" className="form-control" id="inputPasswordRegister" onChange={onPasswordChange} />
+                                    <input type="password" placeholder='password' className="form-control" id="inputPasswordRegister" onChange={onPasswordChange} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="inputPasswordRegisterConfirm" className="form-label">Повторить пароль</label>
-                                    <input type="Repeat Password" className="form-control" id="inputPasswordRegisterConfirm" onChange={onRePasswordChange} />
+                                    <input type="password" placeholder='Repeat Password' className="form-control" id="inputPasswordRegisterConfirm" onChange={onRePasswordChange} />
                                 </div>
                                 <button className="btn btn-dark" style={{ width: '100%' }} onClick={onRegisterClick} >Регистрация</button>
                             </MDBTabsPane>
